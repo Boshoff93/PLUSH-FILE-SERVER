@@ -9,22 +9,6 @@ import (
   "os"
 )
 
-type Error struct {
-  Error    string               `json: "error"`
-}
-
-type Blob struct {
- User_Id  string              `json:user_id`
- Path     string              `json:"path"`
- Data     string              `json:"data"`
-}
-
-func check(e error) {
-    if e != nil {
-        panic(e)
-    }
-}
-
 func addProfilePicture(w http.ResponseWriter, r *http.Request){
 
   var blob Blob
