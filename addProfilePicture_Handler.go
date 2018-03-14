@@ -18,7 +18,6 @@ func addProfilePicture(w http.ResponseWriter, r *http.Request){
   }
   // Spliiting up data:image/jpeg;base64,/9j/ffdgfd...
   imageParts := strings.Split(blob.Data, ",")
-  htmlEmbed := imageParts[0]
   string64 := imageParts[1]
   sDec, err := b64.StdEncoding.DecodeString(string64)
   finished := make(chan bool)
@@ -30,19 +29,17 @@ func addProfilePicture(w http.ResponseWriter, r *http.Request){
   }
 
   go func() {
-    os.MkdirAll(blob.Path, os.ModePerm)
+    path := "./images/profile_pictures/"
+    os.MkdirAll(path, os.ModePerm)
     check(err)
-    file, err := os.Create(blob.Path + blob.User_Id + "_pp_image")
+    fileDec, err := os.Create(path + blob.Pp_Name)
     check(err)
-    defer file.Close()
-    _, err = file.WriteString(htmlEmbed+"\n")
+    defer fileDec.Close()
+    _, err = fileDec.Write(sDec)
     check(err)
-    _, err = file.Write(sDec)
-    check(err)
-    file.Sync()
-
-    finished <- true
+    fileDec.Sync()
     json.NewEncoder(w).Encode(blob)
+    finished <- true
   }()
   <- finished
 }

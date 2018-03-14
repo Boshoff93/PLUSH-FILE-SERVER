@@ -11,7 +11,6 @@ type Error struct {
 }
 
 type Blob struct {
- User_Id  string              `json:user_id`
- Path     string              `json:"path"`
- Data     string              `json:"data"`
+ Pp_Name  string              `json:pp_name`
+ Data     string              `json:data`
 }
