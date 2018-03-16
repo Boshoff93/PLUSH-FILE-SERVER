@@ -11,6 +11,11 @@ type Error struct {
 }
 
 type Blob struct {
- Pp_Name  string              `json:pp_name`
- Data     string              `json:data`
+ Pp_Name  string                `json:pp_name`
+ Data     string                `json:data`
+}
+
+type MultiBlob struct {
+ Pp_Names []string              `json:pp_names`
+ Data     []string              `json:data`
 }
