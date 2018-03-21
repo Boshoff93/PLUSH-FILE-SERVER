@@ -16,25 +16,32 @@ func searchedUserProfilePictures(w http.ResponseWriter, r *http.Request){
   var multiBlob MultiBlob
   var pp_names_string = params["pp_names"]
   fmt.Println(pp_names_string)
-  multiBlob.Pp_Names = strings.Split(pp_names_string, ",,")
-  finished := make(chan bool)
-  go func() {
-    for _, element := range multiBlob.Pp_Names {
-      if (element == "not found") {
-        fmt.Println("Should have three")
-        multiBlob.Data = append(multiBlob.Data, "empty")
-      } else {
-        fmt.Println("Should have one")
-        var string64 []byte
-        path := "./images/profile_pictures/"
-        string64, _ = ioutil.ReadFile(path + element)
-        encodedString := b64.StdEncoding.EncodeToString(string64)
-        multiBlob.Data = append(multiBlob.Data, "data:image/jpeg;base64,"+ encodedString)
-      }
+  if(pp_names_string != "null") {
+    multiBlob.Pp_Names = strings.Split(pp_names_string, ",,"); // for one name
+    if(len(multiBlob.Pp_Names) == 1) {
+      multiBlob.Pp_Names[0] = pp_names_string[0:len(pp_names_string)-1]
     }
-    fmt.Println(multiBlob.Data)
-    json.NewEncoder(w).Encode(multiBlob)
-    finished <- true
-  }()
-  <- finished
+    finished := make(chan bool)
+    go func() {
+      for _, element := range multiBlob.Pp_Names {
+        if (element == "not found") {
+          multiBlob.Data = append(multiBlob.Data, "empty")
+        } else {
+          fmt.Println("this is the:"+ element)
+          var string64 []byte
+          path := "./images/profile_pictures/"
+          string64, _ = ioutil.ReadFile(path + element)
+          encodedString := b64.StdEncoding.EncodeToString(string64)
+          multiBlob.Data = append(multiBlob.Data, "data:image/jpeg;base64,"+ encodedString)
+        }
+      }
+      fmt.Println(multiBlob.Data)
+      json.NewEncoder(w).Encode(multiBlob)
+      finished <- true
+    }()
+    <- finished
+  } else {
+    var empty []string
+    json.NewEncoder(w).Encode(empty)
+  }
 }
