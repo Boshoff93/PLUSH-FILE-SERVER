@@ -17,14 +17,12 @@ func searchedUserProfilePictures(w http.ResponseWriter, r *http.Request){
   var pp_names_string = params["pp_names"]
   fmt.Println(pp_names_string)
   if(pp_names_string != "null") {
-    multiBlob.Pp_Names = strings.Split(pp_names_string, ",,"); // for one name
-    if(len(multiBlob.Pp_Names) == 1) {
-      multiBlob.Pp_Names[0] = pp_names_string[0:len(pp_names_string)-1]
-    }
+    multiBlob.Pp_Names = strings.Split(pp_names_string, ","); // for one name
     finished := make(chan bool)
     go func() {
       for _, element := range multiBlob.Pp_Names {
-        if (element == "not found") {
+        fmt.Print(element)
+        if (element == "empty") {
           multiBlob.Data = append(multiBlob.Data, "empty")
         } else {
           fmt.Println("this is the:"+ element)
@@ -35,7 +33,6 @@ func searchedUserProfilePictures(w http.ResponseWriter, r *http.Request){
           multiBlob.Data = append(multiBlob.Data, "data:image/jpeg;base64,"+ encodedString)
         }
       }
-      fmt.Println(multiBlob.Data)
       json.NewEncoder(w).Encode(multiBlob)
       finished <- true
     }()
