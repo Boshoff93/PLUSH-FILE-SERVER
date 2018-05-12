@@ -25,7 +25,7 @@ func searchedUserProfilePictures(w http.ResponseWriter, r *http.Request){
         if (element == "empty") {
           multiBlob.Data = append(multiBlob.Data, "empty")
         } else {
-          fmt.Println("this is the:"+ element)
+          fmt.Println(element)
           var string64 []byte
           path := "./images/profile_pictures/"
           string64, _ = ioutil.ReadFile(path + element)
