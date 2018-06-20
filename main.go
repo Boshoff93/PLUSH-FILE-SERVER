@@ -16,8 +16,10 @@ func main() {
     methodsOk := handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "OPTIONS", "DELETE"})
 
     router.HandleFunc("/plush-file-server/profilePicture", ValidateMiddleware(addProfilePicture)).Methods("POST")
+    router.HandleFunc("/plush-file-server/postImage", ValidateMiddleware(addPostPicture)).Methods("POST")
     //POST method is used, as a body is required to send over the path of the profile picture
     router.HandleFunc("/plush-file-server/profilePicture/{pp_name}", ValidateMiddleware(getProfilePicture)).Methods("GET")
+
     router.HandleFunc("/plush-file-server/searchedUserProfilePictures/{pp_names}", ValidateMiddleware(searchedUserProfilePictures)).Methods("GET")
     http.ListenAndServe(":8001", handlers.CORS(headersOk, methodsOk, originsOk)(loggedRouter))
 }

@@ -15,6 +15,11 @@ type Blob struct {
  Data     string                `json:data`
 }
 
+type Post_Image struct {
+ Image_Name  string                `json:post_image_name`
+ Data             string                `json:data`
+}
+
 type MultiBlob struct {
  Pp_Names []string              `json:pp_names`
  Data     []string              `json:data`
