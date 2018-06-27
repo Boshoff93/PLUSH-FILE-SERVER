@@ -22,5 +22,6 @@ func main() {
 
     router.HandleFunc("/plush-file-server/searchedUserProfilePictures/{pp_names}", ValidateMiddleware(searchedUserProfilePictures)).Methods("GET")
     router.HandleFunc("/plush-file-server/getPostImages/{posts_with_images}", ValidateMiddleware(getPostImages)).Methods("GET")
+    router.HandleFunc("/plush-file-server/removePostPicture", ValidateMiddleware(removePostPicture)).Methods("DELETE")
     http.ListenAndServe(":8001", handlers.CORS(headersOk, methodsOk, originsOk)(loggedRouter))
 }
